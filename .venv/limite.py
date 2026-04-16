@@ -16,7 +16,6 @@ class CalculadoraEstudiante(tk.Tk):
         self.title("Analizador de Funciones")
         self.geometry("700x850")
 
-        # 🔥 CONTROL DE ZOOM
         self.zoom_actual = 10
         self.zoom_min = 2
         self.zoom_max = 100
@@ -48,7 +47,6 @@ class CalculadoraEstudiante(tk.Tk):
         tk.Button(panel, text="ANALIZAR", command=self.analizar,
                   bg="#2196F3", fg="white", font=("Arial", 10, "bold")).pack(pady=3)
 
-        # 🔥 BOTONES ZOOM
         frame_zoom = tk.Frame(self)
         frame_zoom.pack(pady=5)
 
@@ -93,7 +91,6 @@ class CalculadoraEstudiante(tk.Tk):
         try:
             f_num = lambdify(x, self.expresion_sympy, modules=["numpy"])
 
-            # Detectar asíntotas verticales
             asintotas = []
             try:
                 denom = self.expresion_sympy.as_numer_denom()[1]
@@ -102,7 +99,6 @@ class CalculadoraEstudiante(tk.Tk):
             except Exception:
                 pass
 
-            # Graficar por tramos
             puntos = [-100] + asintotas + [100]
 
             for i in range(len(puntos) - 1):
@@ -120,14 +116,13 @@ class CalculadoraEstudiante(tk.Tk):
         except Exception:
             pass
 
-        # Asíntotas verticales
         try:
             for r in asintotas:
                 self.ax.axvline(r, color='red', linestyle='--', alpha=0.7)
         except Exception:
             pass
 
-        # Huecos
+
         try:
             simplificada = simplify(self.expresion_sympy)
             f_simplificada = lambdify(x, simplificada, modules=["numpy"])
@@ -143,7 +138,7 @@ class CalculadoraEstudiante(tk.Tk):
         except Exception:
             pass
 
-        # Asíntotas horizontales
+
         try:
             h_lim_pos = limit(self.expresion_sympy, x, oo)
             if h_lim_pos.is_finite:
@@ -165,14 +160,12 @@ class CalculadoraEstudiante(tk.Tk):
         self.ax.grid(True, linestyle=':', alpha=0.6)
         self.ax.set_title(f"f(x) = {self.expresion_sympy}", fontsize=10)
 
-        # 🔥 aplicar zoom inicial
         self.zoom_actual = 10
         self.actualizar_limites()
 
         self.ax.legend(fontsize=8)
         self.canvas.draw()
 
-    # 🔥 FUNCIONES DE ZOOM
     def zoom_in(self):
         if self.zoom_actual > self.zoom_min:
             self.zoom_actual *= 0.8
